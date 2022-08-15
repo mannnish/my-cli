@@ -1,7 +1,7 @@
 {
 	"name": "t0ddu",
 	"description": "this is a personalized cli for t0ddu",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"license": "UNLICENSED",
 	"bin": {
 		"desk": "index.js"
