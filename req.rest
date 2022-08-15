@@ -1,0 +1,12 @@
+get https://api.todoist.com/rest/v1/tasks/?filter=overdue
+Authorization: Bearer 873912cedd06fd9ffb20d91488034aa5087ce3d3
+
+### add
+post https://api.todoist.com/rest/v1/tasks
+Authorization: Bearer 873912cedd06fd9ffb20d91488034aa5087ce3d3
+Content-Type: application/json
+
+{
+    "content" : "something task to doq2 22",
+    "due_string" : "today"
+}

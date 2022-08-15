@@ -55,20 +55,18 @@ fetchByteBlog = async () => {
 fetchTodoistTaks = async () => {
 	console.log(chalk.bgRedBright('todoist tasks : '));
 	const config = require('./config.json');
-	const query = `?filter=today`
-	const url = `https://api.todoist.com/rest/v1/tasks/${query}`;
-	const headers = {
-		'Authorization': `Bearer ${config.todoist_key}`
-	};
-	const response = await fetch(url, { headers });
-	const data = await response.json();
-	data.forEach(item => {
-		console.log(item.content);
-	})
+	const headers = { 'Authorization': `Bearer ${config.todoist_key}` };
+	const resToday = await fetch(`https://api.todoist.com/rest/v1/tasks/?filter=today`, { headers });
+	const data = await resToday.json();
+	const resOverdue = await fetch(`https://api.todoist.com/rest/v1/tasks/?filter=overdue`, { headers });
+	const dataOverdue = await resOverdue.json();
+
+	dataOverdue.forEach(item => console.log(chalk.red(item.content)));
+	data.forEach(item => console.log(item.content))
 	console.log('\n');
 }
 
-function dsaSheet() {
+dsaSheet = async () => {
 	const max = 479;
 	const min = 4;
 	let list = [];
@@ -79,16 +77,49 @@ function dsaSheet() {
 	exec(`google-chrome https://docs.google.com/spreadsheets/d/1ryH86xZ_m2zvuAw0dZqlMHQVJROPqX7p/edit#gid=866777697`)
 }
 
-function interviewFn() {
+interviewFn = async () => {
 	const config = require('./config.json');
 	const url = config.interview_prep
 	exec(`google-chrome ${url}`)
 }
 
+addTask = async () => {
+	const input = await inquirer.prompt([
+		{
+			name: 'content',
+			message: 'Enter task',
+			type: 'input'
+		},
+		{
+			name: 'due_string',
+			message: 'Enter due string',
+			type: 'input',
+			default: 'today'
+		},
+	])
+	const config = require('./config.json');
+	const headers = {
+		'Authorization': `Bearer ${config.todoist_key}`,
+		'Content-Type': 'application/json'
+	};
+	const url = `https://api.todoist.com/rest/v1/tasks`;
+	const data = {
+		content: input.content,
+		due_string: input.due_string
+	}
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: headers,
+		body: JSON.stringify(data),
+	});
+	if (response.status == 200) console.log(chalk.green('Task added'));
+	else console.log(chalk.red(`${response.status}: Something went wrong`));
+}
+
 const tasks = [
 	{ title: '5 questions from DSA Sheet', function: dsaSheet },
 	{ title: 'interview prep', function: interviewFn },
-	// { title: 'todoist add task for today', function: addTask },
+	{ title: 'todoist add task for today', function: addTask },
 	// { title: 'update self-note', function: updateSelfNote }
 ];
 
@@ -145,6 +176,10 @@ const tasks = [
 		}
 
 
+	} else if(input.includes('add-task')) {
+		await addTask()
+		await fetchTodoistTaks()
+
 	}
 	else {
 		const login = await authMiddleware();
@@ -160,7 +195,7 @@ const tasks = [
 		})
 		console.log(input.task);
 		const selectedTask = tasks.find(task => task.title === input.task);
-		selectedTask.function();
+		await selectedTask.function();
 	}
 	process.exit(0);
 })();
