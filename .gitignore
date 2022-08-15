@@ -23,6 +23,7 @@ node_modules/
 *.log
 *.sql
 *.env
+config.json
 
 # OS generated files #
 ######################

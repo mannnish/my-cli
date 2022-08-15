@@ -1,10 +1,9 @@
 {
 	"name": "t0ddu",
-	"description": "this is test",
-	"version": "0.0.2",
+	"description": "this is a personalized cli for t0ddu",
+	"version": "0.0.3",
 	"license": "UNLICENSED",
 	"bin": {
-		"my-cli": "index.js",
 		"desk": "index.js"
 	},
 	"author": {
@@ -13,7 +12,7 @@
 		"url": "https://mannnish.vercel.app"
 	},
 	"keywords": [
-		"my-cli",
+		"desk",
 		"mannnish"
 	],
 	"files": [
@@ -25,13 +24,15 @@
 	},
 	"dependencies": {
 		"chalk": "^4.1.2",
+		"cheerio": "^1.0.0-rc.12",
 		"cli-alerts": "^1.2.2",
 		"cli-handle-error": "^4.4.0",
 		"cli-handle-unhandled": "^1.1.1",
 		"cli-meow-help": "^3.1.0",
 		"cli-welcome": "^2.2.2",
 		"inquirer": "^8.1.2",
-		"meow": "^9.0.0"
+		"meow": "^9.0.0",
+		"node-fetch": "^2.6.7"
 	},
 	"devDependencies": {
 		"prettier": "^2.7.1"
